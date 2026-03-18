@@ -11,12 +11,16 @@ import { ShineDataRow } from "@/types/index"
 
 interface LeadSourcePieProps {
   data: ShineDataRow[]
+  selectedMonth?: string
 }
 
-export default function LeadSourcePie({ data }: LeadSourcePieProps) {
-  const latestRow = [...data].filter((r) => r.adsLeadsPercent !== null).pop()
+export default function LeadSourcePie({ data, selectedMonth = "All Time" }: LeadSourcePieProps) {
+  const displayRow =
+    selectedMonth !== "All Time"
+      ? data.find((r) => r.month === selectedMonth) ?? null
+      : [...data].filter((r) => r.adsLeadsPercent !== null).pop() ?? null
 
-  if (!latestRow) {
+  if (!displayRow || displayRow.adsLeadsPercent === null) {
     return (
       <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-yellow">
         <h2 className="font-heading font-bold text-brand-black text-base">
@@ -28,8 +32,8 @@ export default function LeadSourcePie({ data }: LeadSourcePieProps) {
   }
 
   const pieData = [
-    { name: "Organic", value: latestRow.organicLeadsPercent ?? 0, color: "#22C55E" },
-    { name: "Ads", value: latestRow.adsLeadsPercent ?? 0, color: "#3B82F6" },
+    { name: "Organic", value: displayRow.organicLeadsPercent ?? 0, color: "#22C55E" },
+    { name: "Ads", value: displayRow.adsLeadsPercent ?? 0, color: "#3B82F6" },
   ]
 
   const CustomTooltip = ({
@@ -54,7 +58,7 @@ export default function LeadSourcePie({ data }: LeadSourcePieProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-yellow">
       <h2 className="font-heading font-bold text-brand-black text-base">
-        Lead Source — {latestRow.month}
+        Lead Source — {displayRow.month}
       </h2>
       <p className="text-xs text-brand-muted mt-0.5 mb-6">
         Ads vs Organic Distribution
@@ -90,16 +94,16 @@ export default function LeadSourcePie({ data }: LeadSourcePieProps) {
           }}
         >
           <span className="font-heading font-bold text-sm text-brand-black text-center leading-tight">
-            {latestRow.month}
+            {displayRow.month}
           </span>
         </div>
       </div>
       <div className="flex gap-3 justify-center mt-4">
         <span className="rounded-full px-3 py-1 text-sm font-semibold bg-green-100 text-green-700">
-          🟢 Organic: {latestRow.organicLeadsPercent}%
+          🟢 Organic: {displayRow.organicLeadsPercent}%
         </span>
         <span className="rounded-full px-3 py-1 text-sm font-semibold bg-blue-100 text-blue-700">
-          🔵 Ads: {latestRow.adsLeadsPercent}%
+          🔵 Ads: {displayRow.adsLeadsPercent}%
         </span>
       </div>
     </div>

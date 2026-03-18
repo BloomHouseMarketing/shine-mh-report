@@ -22,9 +22,10 @@ const LeadSourcePie = dynamic(
 
 interface ChartGridProps {
   data: ShineDataRow[];
+  selectedMonth: string;
 }
 
-export default function ChartGrid({ data }: ChartGridProps) {
+export default function ChartGrid({ data, selectedMonth }: ChartGridProps) {
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -37,7 +38,7 @@ export default function ChartGrid({ data }: ChartGridProps) {
           <MonthlyCallsBar data={data} />
         </div>
         <div className="lg:col-span-1">
-          <LeadSourcePie data={data} />
+          <LeadSourcePie data={data} selectedMonth={selectedMonth} />
         </div>
       </div>
     </>

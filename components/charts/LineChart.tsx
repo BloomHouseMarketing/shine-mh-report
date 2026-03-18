@@ -10,6 +10,7 @@ import {
   Legend,
   ResponsiveContainer,
   Cell,
+  LabelList,
 } from "recharts";
 import { ShineDataRow } from "@/types/index";
 
@@ -86,7 +87,11 @@ export default function TotalVsQualifiedBar({
           />
           <XAxis
             dataKey="month"
-            tick={{ fill: "#6B7280", fontSize: 12 }}
+            interval={0}
+            angle={-35}
+            textAnchor="end"
+            height={60}
+            tick={{ fill: "#6B7280", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />
@@ -112,6 +117,26 @@ export default function TotalVsQualifiedBar({
                 fillOpacity={entry.hasData ? 1 : 0.5}
               />
             ))}
+            <LabelList
+              dataKey="totalCalls"
+              position="top"
+              content={({ x, y, width, index }) => {
+                const idx = typeof index === "number" ? index : -1;
+                if (idx < 0 || !chartData[idx]?.hasData) return null;
+                return (
+                  <text
+                    x={Number(x) + Number(width) / 2}
+                    y={Number(y) - 6}
+                    textAnchor="middle"
+                    fill="#111111"
+                    fontSize={11}
+                    fontWeight={600}
+                  >
+                    {chartData[idx].totalCalls}
+                  </text>
+                );
+              }}
+            />
           </Bar>
           <Bar
             dataKey="qualifiedCalls"
@@ -127,6 +152,26 @@ export default function TotalVsQualifiedBar({
                 fillOpacity={entry.hasData ? 1 : 0.5}
               />
             ))}
+            <LabelList
+              dataKey="qualifiedCalls"
+              position="top"
+              content={({ x, y, width, index }) => {
+                const idx = typeof index === "number" ? index : -1;
+                if (idx < 0 || !chartData[idx]?.hasData) return null;
+                return (
+                  <text
+                    x={Number(x) + Number(width) / 2}
+                    y={Number(y) - 6}
+                    textAnchor="middle"
+                    fill="#111111"
+                    fontSize={11}
+                    fontWeight={600}
+                  >
+                    {chartData[idx].qualifiedCalls}
+                  </text>
+                );
+              }}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
