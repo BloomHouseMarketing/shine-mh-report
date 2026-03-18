@@ -1,24 +1,8 @@
 import { fetchShineData, getShineKPISummary } from "@/lib/google-sheets";
 import KPICards from "@/components/KPICards";
-import dynamic from "next/dynamic";
+import ChartGrid from "@/components/ChartGrid";
 
-const LeadSourceStackedBar = dynamic(
-  () => import("@/components/charts/BarChart"),
-  { ssr: false },
-);
-const TotalVsQualifiedBar = dynamic(
-  () => import("@/components/charts/LineChart"),
-  { ssr: false },
-);
-const MonthlyCallsBar = dynamic(
-  () => import("@/components/charts/MonthlyCallsBar"),
-  { ssr: false },
-);
-const LeadSourcePie = dynamic(
-  () => import("@/components/charts/LeadSourcePie"),
-  { ssr: false },
-);
-
+export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 export default async function DashboardPage() {
@@ -43,19 +27,7 @@ export default async function DashboardPage() {
         <KPICards summary={summary} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <LeadSourceStackedBar data={shineData} />
-        <TotalVsQualifiedBar data={shineData} />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="lg:col-span-2">
-          <MonthlyCallsBar data={shineData} />
-        </div>
-        <div className="lg:col-span-1">
-          <LeadSourcePie data={shineData} />
-        </div>
-      </div>
+      <ChartGrid data={shineData} />
     </main>
   );
 }

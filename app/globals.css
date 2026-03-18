@@ -1,8 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 :root {
   --background: #F9FAFB;
   --foreground: #111111;
+  --font-heading: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
 }
 
 @theme inline {
@@ -20,12 +23,12 @@
   --color-brand-blue: #3B82F6;
 
   /* Font families */
-  --font-heading: var(--font-heading), sans-serif;
-  --font-body: var(--font-body), sans-serif;
+  --font-heading: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-body);
 }

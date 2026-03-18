@@ -94,6 +94,7 @@ export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
             tickLine={false}
           />
           <YAxis
+            domain={[0, "auto"]}
             tick={{ fill: "#6B7280", fontSize: 12 }}
             axisLine={false}
             tickLine={false}
