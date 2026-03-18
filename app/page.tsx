@@ -1,6 +1,5 @@
 import { fetchShineData, getShineKPISummary } from "@/lib/google-sheets";
-import KPICards from "@/components/KPICards";
-import ChartGrid from "@/components/ChartGrid";
+import FilterableSection from "@/components/FilterableSection";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
@@ -23,11 +22,7 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      <div className="mb-6">
-        <KPICards summary={summary} />
-      </div>
-
-      <ChartGrid data={shineData} />
+      <FilterableSection data={shineData} summary={summary} />
     </main>
   );
 }

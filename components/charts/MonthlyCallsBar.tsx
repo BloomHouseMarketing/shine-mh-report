@@ -20,7 +20,7 @@ interface MonthlyCallsBarProps {
 export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
   const chartData = data.map((r) => ({
     month: r.month,
-    totalCalls: r.totalCalls ?? 0,
+    totalCalls: r.totalCalls !== null ? r.totalCalls : 0,
     hasData: r.totalCalls !== null,
   }));
 
@@ -81,7 +81,7 @@ export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
         Total First-Time Calls (FTC)
       </p>
       <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={chartData}>
+        <BarChart data={chartData} maxBarSize={60}>
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
@@ -89,7 +89,11 @@ export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
           />
           <XAxis
             dataKey="month"
-            tick={{ fill: "#6B7280", fontSize: 12 }}
+            interval={0}
+            angle={-35}
+            textAnchor="end"
+            height={60}
+            tick={{ fill: "#6B7280", fontSize: 11 }}
             axisLine={false}
             tickLine={false}
           />

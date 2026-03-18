@@ -3,9 +3,10 @@ import KpiCard from "@/components/ui/KpiCard";
 
 interface KPICardsProps {
   summary: ShineKPISummary;
+  monthSelected?: boolean;
 }
 
-export default function KPICards({ summary }: KPICardsProps) {
+export default function KPICards({ summary, monthSelected }: KPICardsProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       <KpiCard
@@ -25,11 +26,19 @@ export default function KPICards({ summary }: KPICardsProps) {
         value={`${summary.qualificationRate}%`}
         subtext="calls converted"
       />
-      <KpiCard
-        icon="🌿"
-        label="Avg Organic Lead %"
-        value={`${summary.avgOrganicPercent}%`}
-      />
+      {monthSelected ? (
+        <KpiCard
+          icon="📣"
+          label="Ads Lead %"
+          value={`${summary.avgOrganicPercent}%`}
+        />
+      ) : (
+        <KpiCard
+          icon="🌿"
+          label="Avg Organic Lead %"
+          value={`${summary.avgOrganicPercent}%`}
+        />
+      )}
     </div>
   );
 }
