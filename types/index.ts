@@ -1,10 +1,24 @@
-// Shared type definitions
-
-export interface SheetRow {
-  // TODO: Define based on actual spreadsheet columns
-  [key: string]: string | number;
+// ─── Shine Data Row ──────────────────────────────────────────────────────────
+// One row per month from the Google Sheet.
+// null means the cell was blank — the month row exists but data is missing.
+export interface ShineDataRow {
+  month: string;
+  totalCalls: number | null;
+  qualifiedCalls: number | null;
+  adsLeadsPercent: number | null;
+  organicLeadsPercent: number | null;
 }
 
-export interface DashboardData {
-  rows: SheetRow[];
+// ─── KPI Summary ─────────────────────────────────────────────────────────────
+// Aggregated metrics derived from the full data set.
+export interface ShineKPISummary {
+  totalCallsSum: number;
+  qualifiedCallsSum: number;
+  avgAdsPercent: number;
+  avgOrganicPercent: number;
+  qualificationRate: number;
+  latestMonth: string;
+  latestAds: number;
+  latestOrganic: number;
+  monthsWithData: number;
 }
