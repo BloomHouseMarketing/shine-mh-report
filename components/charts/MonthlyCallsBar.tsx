@@ -9,7 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  LabelList,
 } from "recharts";
 import { ShineDataRow } from "@/types/index";
 
@@ -80,67 +79,65 @@ export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
       <p className="text-xs text-brand-muted mt-0.5 mb-6">
         Total First-Time Calls (FTC)
       </p>
-      <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={chartData} maxBarSize={60} margin={{ top: 25, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
-          <CartesianGrid
-            vertical={false}
-            strokeDasharray="3 3"
-            stroke="#F3F4F6"
-          />
-          <XAxis
-            dataKey="month"
-            interval={0}
-            angle={-35}
-            textAnchor="end"
-            height={60}
-            tick={{ fill: "#6B7280", fontSize: 11 }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            domain={[0, "auto"]}
-            tick={{ fill: "#6B7280", fontSize: 12 }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Bar
-            dataKey="totalCalls"
-            name="Total Calls"
-            fill="#22C55E"
-            radius={[6, 6, 0, 0]}
-          >
-            {chartData.map((entry, i) => (
-              <Cell
-                key={i}
-                fill={entry.hasData ? "#22C55E" : "#E5E7EB"}
-                fillOpacity={entry.hasData ? 1 : 0.5}
-              />
-            ))}
-            <LabelList
+      <div style={{ overflow: "visible" }}>
+        <ResponsiveContainer width="100%" height={260}>
+          <BarChart data={chartData} maxBarSize={60} margin={{ top: 30, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
+            <CartesianGrid
+              vertical={false}
+              strokeDasharray="3 3"
+              stroke="#F3F4F6"
+            />
+            <XAxis
+              dataKey="month"
+              interval={0}
+              angle={-35}
+              textAnchor="end"
+              height={60}
+              tick={{ fill: "#6B7280", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              domain={[0, "auto"]}
+              tick={{ fill: "#6B7280", fontSize: 12 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Bar
               dataKey="totalCalls"
-              position="top"
-              content={(props: any) => {
+              name="Total Calls"
+              fill="#22C55E"
+              radius={[6, 6, 0, 0]}
+              label={(props: any) => {
                 const { x, y, width, value, index } = props;
-                if (!chartData[index]?.hasData) return null;
-                if (value === null || value === undefined) return null;
+                if (!chartData[index]?.hasData) return <g />;
+                if (value === null || value === undefined) return <g />;
                 return (
                   <text
                     x={Number(x) + Number(width) / 2}
-                    y={Number(y) - 6}
+                    y={Number(y) - 8}
                     textAnchor="middle"
                     fontSize={11}
                     fontWeight={600}
                     fill="#111111"
                   >
-                    {`${value}`}
+                    {value}
                   </text>
                 );
               }}
-            />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+            >
+              {chartData.map((entry, i) => (
+                <Cell
+                  key={i}
+                  fill={entry.hasData ? "#22C55E" : "#E5E7EB"}
+                  fillOpacity={entry.hasData ? 1 : 0.5}
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
       {trendDelta !== null && (
         <p
           className={`text-xs font-semibold mt-3 ${trendDelta >= 0 ? "text-green-500" : "text-red-500"}`}

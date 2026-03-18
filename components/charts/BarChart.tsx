@@ -10,7 +10,6 @@ import {
   Legend,
   ResponsiveContainer,
   Cell,
-  LabelList,
 } from "recharts";
 import { ShineDataRow } from "@/types/index";
 
@@ -78,66 +77,56 @@ export default function LeadSourceStackedBar({
       <p className="text-xs text-brand-muted mt-0.5 mb-6">
         Ads vs Organic %
       </p>
-      <ResponsiveContainer width="100%" height={320}>
-        <RechartsBarChart data={chartData} barCategoryGap="30%" margin={{ top: 25, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
-          <CartesianGrid
-            vertical={false}
-            strokeDasharray="3 3"
-            stroke="#F3F4F6"
-          />
-          <XAxis
-            dataKey="month"
-            interval={0}
-            angle={-35}
-            textAnchor="end"
-            height={60}
-            tick={{ fill: "#6B7280", fontSize: 11 }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            domain={[0, 100]}
-            tickFormatter={(v) => `${v}%`}
-            tick={{ fill: "#6B7280", fontSize: 12 }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend wrapperStyle={{ paddingTop: "16px" }} />
-          <Bar dataKey="organic" name="Organic Leads" stackId="a" fill="#22C55E">
-            {chartData.map((entry, i) => (
-              <Cell
-                key={i}
-                fill={entry.hasData ? "#22C55E" : "#E5E7EB"}
-                fillOpacity={entry.hasData ? 1 : 0.5}
-              />
-            ))}
-          </Bar>
-          <Bar
-            dataKey="ads"
-            name="Ads Leads"
-            stackId="a"
-            fill="#3B82F6"
-            radius={[4, 4, 0, 0]}
-          >
-            {chartData.map((entry, i) => (
-              <Cell
-                key={i}
-                fill={entry.hasData ? "#3B82F6" : "#D1D5DB"}
-                fillOpacity={entry.hasData ? 1 : 0.5}
-              />
-            ))}
-            <LabelList
+      <div style={{ overflow: "visible" }}>
+        <ResponsiveContainer width="100%" height={320}>
+          <RechartsBarChart data={chartData} barCategoryGap="30%" margin={{ top: 30, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
+            <CartesianGrid
+              vertical={false}
+              strokeDasharray="3 3"
+              stroke="#F3F4F6"
+            />
+            <XAxis
+              dataKey="month"
+              interval={0}
+              angle={-35}
+              textAnchor="end"
+              height={60}
+              tick={{ fill: "#6B7280", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              domain={[0, 100]}
+              tickFormatter={(v) => `${v}%`}
+              tick={{ fill: "#6B7280", fontSize: 12 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend wrapperStyle={{ paddingTop: "16px" }} />
+            <Bar dataKey="organic" name="Organic Leads" stackId="a" fill="#22C55E">
+              {chartData.map((entry, i) => (
+                <Cell
+                  key={i}
+                  fill={entry.hasData ? "#22C55E" : "#E5E7EB"}
+                  fillOpacity={entry.hasData ? 1 : 0.5}
+                />
+              ))}
+            </Bar>
+            <Bar
               dataKey="ads"
-              position="top"
-              content={(props: any) => {
+              name="Ads Leads"
+              stackId="a"
+              fill="#3B82F6"
+              radius={[4, 4, 0, 0]}
+              label={(props: any) => {
                 const { x, y, width, value, index } = props;
-                if (!chartData[index]?.hasData) return null;
-                if (value === null || value === undefined) return null;
+                if (!chartData[index]?.hasData) return <g />;
+                if (value === null || value === undefined) return <g />;
                 return (
                   <text
                     x={Number(x) + Number(width) / 2}
-                    y={Number(y) - 6}
+                    y={Number(y) - 8}
                     textAnchor="middle"
                     fontSize={11}
                     fontWeight={600}
@@ -147,10 +136,18 @@ export default function LeadSourceStackedBar({
                   </text>
                 );
               }}
-            />
-          </Bar>
-        </RechartsBarChart>
-      </ResponsiveContainer>
+            >
+              {chartData.map((entry, i) => (
+                <Cell
+                  key={i}
+                  fill={entry.hasData ? "#3B82F6" : "#D1D5DB"}
+                  fillOpacity={entry.hasData ? 1 : 0.5}
+                />
+              ))}
+            </Bar>
+          </RechartsBarChart>
+        </ResponsiveContainer>
+      </div>
       {hasGrayBars && (
         <p className="text-xs text-brand-muted mt-3">
           Months without data shown in gray
