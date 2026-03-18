@@ -7,23 +7,20 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   Cell,
+  LabelList,
 } from "recharts";
 import { ShineDataRow } from "@/types/index";
 
-interface TotalVsQualifiedBarProps {
+interface MonthlyCallsBarProps {
   data: ShineDataRow[];
 }
 
-export default function TotalVsQualifiedBar({
-  data,
-}: TotalVsQualifiedBarProps) {
+export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
   const chartData = data.map((r) => ({
     month: r.month,
     totalCalls: r.totalCalls ?? 0,
-    qualifiedCalls: r.qualifiedCalls ?? 0,
     hasData: r.totalCalls !== null,
   }));
 
@@ -33,7 +30,7 @@ export default function TotalVsQualifiedBar({
     return (
       <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-yellow">
         <h2 className="font-heading font-bold text-brand-black text-base">
-          Total vs Qualified Calls
+          Monthly Call Volume
         </h2>
         <p className="text-xs text-brand-muted mt-0.5">No data yet</p>
       </div>
@@ -41,6 +38,13 @@ export default function TotalVsQualifiedBar({
   }
 
   const hasGrayBars = chartData.some((d) => !d.hasData);
+
+  const filled = data.filter((r) => r.totalCalls !== null);
+  const trendDelta =
+    filled.length >= 2
+      ? (filled[filled.length - 1].totalCalls ?? 0) -
+        (filled[filled.length - 2].totalCalls ?? 0)
+      : null;
 
   const CustomTooltip = ({
     active,
@@ -64,7 +68,6 @@ export default function TotalVsQualifiedBar({
       <div className="bg-brand-black rounded-lg px-4 py-3 text-sm shadow-xl">
         <p className="text-white font-semibold mb-2">{label}</p>
         <p className="text-[#22C55E]">Total Calls: {entry.totalCalls}</p>
-        <p className="text-[#3B82F6]">Qualified: {entry.qualifiedCalls}</p>
       </div>
     );
   };
@@ -72,13 +75,13 @@ export default function TotalVsQualifiedBar({
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-yellow">
       <h2 className="font-heading font-bold text-brand-black text-base">
-        Total vs Qualified Calls
+        Monthly Call Volume
       </h2>
       <p className="text-xs text-brand-muted mt-0.5 mb-6">
-        FTC Call Performance by Month
+        Total First-Time Calls (FTC)
       </p>
-      <ResponsiveContainer width="100%" height={320}>
-        <BarChart data={chartData} barCategoryGap="25%">
+      <ResponsiveContainer width="100%" height={260}>
+        <BarChart data={chartData}>
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
@@ -97,13 +100,11 @@ export default function TotalVsQualifiedBar({
             tickLine={false}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Legend wrapperStyle={{ paddingTop: "16px" }} />
           <Bar
             dataKey="totalCalls"
-            name="Total Calls (FTC)"
+            name="Total Calls"
             fill="#22C55E"
-            barSize={20}
-            radius={[4, 4, 0, 0]}
+            radius={[6, 6, 0, 0]}
           >
             {chartData.map((entry, i) => (
               <Cell
@@ -112,24 +113,41 @@ export default function TotalVsQualifiedBar({
                 fillOpacity={entry.hasData ? 1 : 0.5}
               />
             ))}
-          </Bar>
-          <Bar
-            dataKey="qualifiedCalls"
-            name="Qualified Calls"
-            fill="#3B82F6"
-            barSize={20}
-            radius={[4, 4, 0, 0]}
-          >
-            {chartData.map((entry, i) => (
-              <Cell
-                key={i}
-                fill={entry.hasData ? "#3B82F6" : "#D1D5DB"}
-                fillOpacity={entry.hasData ? 1 : 0.5}
-              />
-            ))}
+            <LabelList
+              dataKey="totalCalls"
+              position="top"
+              content={({ x, y, width, index }) => {
+                const idx = typeof index === "number" ? index : -1;
+                if (idx < 0 || !chartData[idx]?.hasData) return null;
+                return (
+                  <text
+                    x={Number(x) + Number(width) / 2}
+                    y={Number(y) - 6}
+                    textAnchor="middle"
+                    fill="#111111"
+                    fontSize={11}
+                    fontWeight={600}
+                  >
+                    {chartData[idx].totalCalls}
+                  </text>
+                );
+              }}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
+      {trendDelta !== null && (
+        <p
+          className={`text-xs font-semibold mt-3 ${trendDelta >= 0 ? "text-green-500" : "text-red-500"}`}
+        >
+          {trendDelta >= 0 ? "▲" : "▼"} {Math.abs(trendDelta)} calls vs
+          previous month
+          <span className="text-brand-muted font-normal ml-1">
+            ({filled[filled.length - 2].month} →{" "}
+            {filled[filled.length - 1].month})
+          </span>
+        </p>
+      )}
       {hasGrayBars && (
         <p className="text-xs text-brand-muted mt-3">
           Months without data shown in gray
