@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans } from "next/font/google";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const syne = Syne({
@@ -15,8 +17,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Shine Mental Health — Dashboard",
-  description: "Performance dashboard for Shine Mental Health",
+  title: "Shine Mental Health | Bloomhouse Marketing",
+  description:
+    "Call performance and lead source analytics for Shine Mental Health",
 };
 
 export default function RootLayout({
@@ -29,8 +32,10 @@ export default function RootLayout({
       lang="en"
       className={`${syne.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-body bg-brand-pageBg text-brand-black">
-        {children}
+      <body className="min-h-screen font-body bg-brand-pageBg text-brand-black">
+        <Header />
+        <div className="max-w-[1280px] mx-auto px-6">{children}</div>
+        <Footer />
       </body>
     </html>
   );
