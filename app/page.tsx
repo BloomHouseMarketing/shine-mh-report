@@ -1,7 +1,6 @@
 import { fetchShineData, getShineKPISummary } from "@/lib/google-sheets";
 import FilterableSection from "@/components/FilterableSection";
 
-export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
 export default async function DashboardPage() {

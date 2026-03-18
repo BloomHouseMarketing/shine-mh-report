@@ -17,26 +17,6 @@ interface LeadSourceStackedBarProps {
   data: ShineDataRow[];
 }
 
-const AdsBar = (props: any) => {
-  const { x, y, width, height, value, index, data } = props;
-  const hasData = data?.[index]?.hasData;
-  return (
-    <g>
-      <rect x={x} y={y} width={width} height={height}
-        fill={hasData ? "#3B82F6" : "#D1D5DB"}
-        fillOpacity={hasData ? 1 : 0.5}
-        rx={4} />
-      {hasData && value !== null && value !== undefined ? (
-        <text x={x + width / 2} y={y - 8}
-          textAnchor="middle" fontSize={11}
-          fontWeight={600} fill="#111111">
-          {value}%
-        </text>
-      ) : null}
-    </g>
-  );
-};
-
 export default function LeadSourceStackedBar({
   data,
 }: LeadSourceStackedBarProps) {
@@ -97,9 +77,9 @@ export default function LeadSourceStackedBar({
       <p className="text-xs text-brand-muted mt-0.5 mb-6">
         Ads vs Organic %
       </p>
-      <div style={{ overflow: "visible" }}>
+      <div>
         <ResponsiveContainer width="100%" height={320}>
-          <RechartsBarChart data={chartData} barCategoryGap="30%" margin={{ top: 30, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
+          <RechartsBarChart data={chartData} barCategoryGap="30%">
             <CartesianGrid
               vertical={false}
               strokeDasharray="3 3"
@@ -133,12 +113,15 @@ export default function LeadSourceStackedBar({
                 />
               ))}
             </Bar>
-            <Bar
-              dataKey="ads"
-              name="Ads Leads"
-              stackId="a"
-              shape={(props: any) => <AdsBar {...props} data={chartData} />}
-            />
+            <Bar dataKey="ads" name="Ads Leads" stackId="a" fill="#3B82F6" radius={[4, 4, 0, 0]}>
+              {chartData.map((entry, i) => (
+                <Cell
+                  key={i}
+                  fill={entry.hasData ? "#3B82F6" : "#D1D5DB"}
+                  fillOpacity={entry.hasData ? 1 : 0.5}
+                />
+              ))}
+            </Bar>
           </RechartsBarChart>
         </ResponsiveContainer>
       </div>
