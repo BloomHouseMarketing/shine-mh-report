@@ -8,13 +8,39 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
 } from "recharts";
 import { ShineDataRow } from "@/types/index";
 
 interface MonthlyCallsBarProps {
   data: ShineDataRow[];
 }
+
+const LabeledBar = (props: any) => {
+  const { x, y, width, height, value, index, data } = props;
+  const hasData = data?.[index]?.hasData;
+  const fill = hasData ? "#22C55E" : "#E5E7EB";
+  const opacity = hasData ? 1 : 0.5;
+  return (
+    <g>
+      <rect
+        x={x} y={y} width={width} height={height}
+        fill={fill} fillOpacity={opacity} rx={6}
+      />
+      {hasData && value ? (
+        <text
+          x={x + width / 2}
+          y={y - 8}
+          textAnchor="middle"
+          fontSize={11}
+          fontWeight={600}
+          fill="#111111"
+        >
+          {value}
+        </text>
+      ) : null}
+    </g>
+  );
+};
 
 export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
   const chartData = data.map((r) => ({
@@ -106,35 +132,10 @@ export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
             <Tooltip content={<CustomTooltip />} />
             <Bar
               dataKey="totalCalls"
-              name="Total Calls"
-              fill="#22C55E"
-              radius={[6, 6, 0, 0]}
-              label={(props: any) => {
-                const { x, y, width, value, index } = props;
-                if (!chartData[index]?.hasData) return <g />;
-                if (value === null || value === undefined) return <g />;
-                return (
-                  <text
-                    x={Number(x) + Number(width) / 2}
-                    y={Number(y) - 8}
-                    textAnchor="middle"
-                    fontSize={11}
-                    fontWeight={600}
-                    fill="#111111"
-                  >
-                    {value}
-                  </text>
-                );
-              }}
-            >
-              {chartData.map((entry, i) => (
-                <Cell
-                  key={i}
-                  fill={entry.hasData ? "#22C55E" : "#E5E7EB"}
-                  fillOpacity={entry.hasData ? 1 : 0.5}
-                />
-              ))}
-            </Bar>
+              shape={(props: any) => (
+                <LabeledBar {...props} data={chartData} />
+              )}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
