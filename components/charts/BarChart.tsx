@@ -79,7 +79,7 @@ export default function LeadSourceStackedBar({
         Ads vs Organic %
       </p>
       <ResponsiveContainer width="100%" height={320}>
-        <RechartsBarChart data={chartData} barCategoryGap="30%" margin={{ top: 25, right: 10, left: 10, bottom: 60 }}>
+        <RechartsBarChart data={chartData} barCategoryGap="30%" margin={{ top: 25, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
