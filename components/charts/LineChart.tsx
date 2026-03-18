@@ -79,7 +79,7 @@ export default function TotalVsQualifiedBar({
         FTC Call Performance by Month
       </p>
       <ResponsiveContainer width="100%" height={320}>
-        <BarChart data={chartData} barCategoryGap="25%" margin={{ top: 25, right: 10, left: 10, bottom: 60 }}>
+        <BarChart data={chartData} barCategoryGap="25%" margin={{ top: 25, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"

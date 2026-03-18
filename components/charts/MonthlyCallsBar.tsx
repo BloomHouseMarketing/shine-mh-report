@@ -81,7 +81,7 @@ export default function MonthlyCallsBar({ data }: MonthlyCallsBarProps) {
         Total First-Time Calls (FTC)
       </p>
       <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={chartData} maxBarSize={60} margin={{ top: 25, right: 10, left: 10, bottom: 60 }}>
+        <BarChart data={chartData} maxBarSize={60} margin={{ top: 25, right: 10, left: 10, bottom: 60 }} style={{ overflow: "visible" }}>
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
