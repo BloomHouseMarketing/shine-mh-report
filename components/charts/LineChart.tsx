@@ -1,32 +1,140 @@
 "use client";
 
 import {
-  LineChart as RechartsLineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
+  Cell,
 } from "recharts";
+import { ShineDataRow } from "@/types/index";
 
-interface LineChartProps {
-  data: Record<string, unknown>[];
-  xKey: string;
-  yKey: string;
+interface TotalVsQualifiedBarProps {
+  data: ShineDataRow[];
 }
 
-export default function LineChart({ data, xKey, yKey }: LineChartProps) {
-  // TODO: Implement chart with real data
+export default function TotalVsQualifiedBar({
+  data,
+}: TotalVsQualifiedBarProps) {
+  const chartData = data.map((r) => ({
+    month: r.month,
+    totalCalls: r.totalCalls ?? 0,
+    qualifiedCalls: r.qualifiedCalls ?? 0,
+    hasData: r.totalCalls !== null,
+  }));
+
+  const hasAnyData = data.some((r) => r.totalCalls !== null);
+
+  if (!hasAnyData) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-yellow">
+        <h2 className="font-heading font-bold text-brand-black text-base">
+          Total vs Qualified Calls
+        </h2>
+        <p className="text-xs text-brand-muted mt-0.5">No data yet</p>
+      </div>
+    );
+  }
+
+  const hasGrayBars = chartData.some((d) => !d.hasData);
+
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: { value: number }[];
+    label?: string;
+  }) => {
+    if (!active || !payload?.length) return null;
+    const entry = chartData.find((d) => d.month === label);
+    if (!entry?.hasData) {
+      return (
+        <div className="bg-white border border-brand-border rounded-lg px-3 py-2 text-xs text-brand-muted shadow">
+          {label}: No data yet
+        </div>
+      );
+    }
+    return (
+      <div className="bg-brand-black rounded-lg px-4 py-3 text-sm shadow-xl">
+        <p className="text-white font-semibold mb-2">{label}</p>
+        <p className="text-[#22C55E]">Total Calls: {entry.totalCalls}</p>
+        <p className="text-[#3B82F6]">Qualified: {entry.qualifiedCalls}</p>
+      </div>
+    );
+  };
+
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <RechartsLineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={xKey} />
-        <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey={yKey} stroke="#F5C518" strokeWidth={2} />
-      </RechartsLineChart>
-    </ResponsiveContainer>
+    <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-yellow">
+      <h2 className="font-heading font-bold text-brand-black text-base">
+        Total vs Qualified Calls
+      </h2>
+      <p className="text-xs text-brand-muted mt-0.5 mb-6">
+        FTC Call Performance by Month
+      </p>
+      <ResponsiveContainer width="100%" height={320}>
+        <BarChart data={chartData} barCategoryGap="25%">
+          <CartesianGrid
+            vertical={false}
+            strokeDasharray="3 3"
+            stroke="#F3F4F6"
+          />
+          <XAxis
+            dataKey="month"
+            tick={{ fill: "#6B7280", fontSize: 12 }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <YAxis
+            domain={[0, "auto"]}
+            tick={{ fill: "#6B7280", fontSize: 12 }}
+            axisLine={false}
+            tickLine={false}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Legend wrapperStyle={{ paddingTop: "16px" }} />
+          <Bar
+            dataKey="totalCalls"
+            name="Total Calls (FTC)"
+            fill="#22C55E"
+            barSize={20}
+            radius={[4, 4, 0, 0]}
+          >
+            {chartData.map((entry, i) => (
+              <Cell
+                key={i}
+                fill={entry.hasData ? "#22C55E" : "#E5E7EB"}
+                fillOpacity={entry.hasData ? 1 : 0.5}
+              />
+            ))}
+          </Bar>
+          <Bar
+            dataKey="qualifiedCalls"
+            name="Qualified Calls"
+            fill="#3B82F6"
+            barSize={20}
+            radius={[4, 4, 0, 0]}
+          >
+            {chartData.map((entry, i) => (
+              <Cell
+                key={i}
+                fill={entry.hasData ? "#3B82F6" : "#D1D5DB"}
+                fillOpacity={entry.hasData ? 1 : 0.5}
+              />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+      {hasGrayBars && (
+        <p className="text-xs text-brand-muted mt-3">
+          Months without data shown in gray
+        </p>
+      )}
+    </div>
   );
 }
