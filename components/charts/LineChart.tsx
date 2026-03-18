@@ -79,7 +79,7 @@ export default function TotalVsQualifiedBar({
         FTC Call Performance by Month
       </p>
       <ResponsiveContainer width="100%" height={320}>
-        <BarChart data={chartData} barCategoryGap="25%">
+        <BarChart data={chartData} barCategoryGap="25%" margin={{ top: 25, right: 10, left: 10, bottom: 60 }}>
           <CartesianGrid
             vertical={false}
             strokeDasharray="3 3"
@@ -120,19 +120,20 @@ export default function TotalVsQualifiedBar({
             <LabelList
               dataKey="totalCalls"
               position="top"
-              content={({ x, y, width, index }) => {
-                const idx = typeof index === "number" ? index : -1;
-                if (idx < 0 || !chartData[idx]?.hasData) return null;
+              content={(props: any) => {
+                const { x, y, width, value, index } = props;
+                if (!chartData[index]?.hasData) return null;
+                if (value === null || value === undefined) return null;
                 return (
                   <text
                     x={Number(x) + Number(width) / 2}
                     y={Number(y) - 6}
                     textAnchor="middle"
-                    fill="#111111"
                     fontSize={11}
                     fontWeight={600}
+                    fill="#111111"
                   >
-                    {chartData[idx].totalCalls}
+                    {`${value}`}
                   </text>
                 );
               }}
@@ -155,19 +156,20 @@ export default function TotalVsQualifiedBar({
             <LabelList
               dataKey="qualifiedCalls"
               position="top"
-              content={({ x, y, width, index }) => {
-                const idx = typeof index === "number" ? index : -1;
-                if (idx < 0 || !chartData[idx]?.hasData) return null;
+              content={(props: any) => {
+                const { x, y, width, value, index } = props;
+                if (!chartData[index]?.hasData) return null;
+                if (value === null || value === undefined) return null;
                 return (
                   <text
                     x={Number(x) + Number(width) / 2}
                     y={Number(y) - 6}
                     textAnchor="middle"
-                    fill="#111111"
                     fontSize={11}
                     fontWeight={600}
+                    fill="#111111"
                   >
-                    {chartData[idx].qualifiedCalls}
+                    {`${value}`}
                   </text>
                 );
               }}
