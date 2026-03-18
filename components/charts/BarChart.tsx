@@ -17,6 +17,26 @@ interface LeadSourceStackedBarProps {
   data: ShineDataRow[];
 }
 
+const AdsBar = (props: any) => {
+  const { x, y, width, height, value, index, data } = props;
+  const hasData = data?.[index]?.hasData;
+  return (
+    <g>
+      <rect x={x} y={y} width={width} height={height}
+        fill={hasData ? "#3B82F6" : "#D1D5DB"}
+        fillOpacity={hasData ? 1 : 0.5}
+        rx={4} />
+      {hasData && value !== null && value !== undefined ? (
+        <text x={x + width / 2} y={y - 8}
+          textAnchor="middle" fontSize={11}
+          fontWeight={600} fill="#111111">
+          {value}%
+        </text>
+      ) : null}
+    </g>
+  );
+};
+
 export default function LeadSourceStackedBar({
   data,
 }: LeadSourceStackedBarProps) {
@@ -117,34 +137,8 @@ export default function LeadSourceStackedBar({
               dataKey="ads"
               name="Ads Leads"
               stackId="a"
-              fill="#3B82F6"
-              radius={[4, 4, 0, 0]}
-              label={(props: any) => {
-                const { x, y, width, value, index } = props;
-                if (!chartData[index]?.hasData) return <g />;
-                if (value === null || value === undefined) return <g />;
-                return (
-                  <text
-                    x={Number(x) + Number(width) / 2}
-                    y={Number(y) - 8}
-                    textAnchor="middle"
-                    fontSize={11}
-                    fontWeight={600}
-                    fill="#111111"
-                  >
-                    {`${value}%`}
-                  </text>
-                );
-              }}
-            >
-              {chartData.map((entry, i) => (
-                <Cell
-                  key={i}
-                  fill={entry.hasData ? "#3B82F6" : "#D1D5DB"}
-                  fillOpacity={entry.hasData ? 1 : 0.5}
-                />
-              ))}
-            </Bar>
+              shape={(props: any) => <AdsBar {...props} data={chartData} />}
+            />
           </RechartsBarChart>
         </ResponsiveContainer>
       </div>
