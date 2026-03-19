@@ -143,12 +143,14 @@ export default function TotalVsQualifiedBar({
             <Bar
               dataKey="totalCalls"
               name="Total Calls (FTC)"
+              fill="#22C55E"
               barSize={20}
               shape={(props: any) => <GreenBar {...props} data={chartData} />}
             />
             <Bar
               dataKey="qualifiedCalls"
               name="Qualified Calls"
+              fill="#3B82F6"
               barSize={20}
               shape={(props: any) => <BlueBar {...props} data={chartData} />}
             />
