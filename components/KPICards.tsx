@@ -3,32 +3,33 @@ import KpiCard from "@/components/ui/KpiCard";
 
 interface KPICardsProps {
   summary: ShineKPISummary;
+  adsLeadsPercent: string;
 }
 
-export default function KPICards({ summary }: KPICardsProps) {
+export default function KPICards({ summary, adsLeadsPercent }: KPICardsProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
       <KpiCard
-        icon="📞"
         label="Total FTC Calls"
         value={summary.totalCallsSum}
       />
       <KpiCard
-        icon="✅"
         label="Qualified Calls"
         value={summary.qualifiedCallsSum}
         subtext={`of ${summary.totalCallsSum} total calls`}
       />
       <KpiCard
-        icon="📊"
         label="Qualification Rate"
         value={`${summary.qualificationRate}%`}
         subtext="calls converted"
       />
       <KpiCard
-        icon="🌿"
         label="Organic Lead %"
         value={`${summary.avgOrganicPercent}%`}
+      />
+      <KpiCard
+        label="PPC LEADS %"
+        value={adsLeadsPercent}
       />
     </div>
   );
