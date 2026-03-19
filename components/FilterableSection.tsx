@@ -14,10 +14,10 @@ export default function FilterableSection({
   data,
   summary,
 }: FilterableSectionProps) {
-  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
-    const filled = data.filter((r) => r.totalCalls !== null);
-    return filled[filled.length - 1]?.month ?? "All Time";
-  });
+  const currentMonth =
+    data.filter((r) => r.totalCalls !== null).pop()?.month ?? "";
+
+  const [selectedMonth, setSelectedMonth] = useState<string>(currentMonth);
 
   const monthsWithData = data
     .filter((r) => r.totalCalls !== null)
@@ -41,17 +41,28 @@ export default function FilterableSection({
     };
   })();
 
+  const activePill =
+    "bg-brand-yellow text-brand-black font-semibold";
+  const inactivePill =
+    "bg-white border border-brand-border text-brand-muted hover:border-brand-yellow transition";
+
   return (
     <>
       <div className="flex flex-wrap gap-2 mb-6">
+        <button
+          onClick={() => setSelectedMonth(currentMonth)}
+          className={`rounded-full px-4 py-1.5 text-sm cursor-pointer font-bold ${
+            selectedMonth === currentMonth ? activePill : inactivePill
+          }`}
+        >
+          ● Current Month
+        </button>
         {monthsWithData.map((month) => (
           <button
             key={month}
             onClick={() => setSelectedMonth(month)}
             className={`rounded-full px-4 py-1.5 text-sm cursor-pointer ${
-              selectedMonth === month
-                ? "bg-brand-yellow text-brand-black font-semibold"
-                : "bg-white border border-brand-border text-brand-muted hover:border-brand-yellow transition"
+              selectedMonth === month ? activePill : inactivePill
             }`}
           >
             {month}
