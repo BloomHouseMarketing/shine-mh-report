@@ -71,7 +71,10 @@ export default function FilterableSection({
       </div>
 
       <div className="mb-6">
-        <KPICards summary={filteredSummary} />
+        <KPICards
+          summary={filteredSummary}
+          adsLeadsPercent={`${selectedRow?.adsLeadsPercent ?? 0}%`}
+        />
       </div>
 
       <ChartGrid data={data} selectedMonth={selectedMonth} />
