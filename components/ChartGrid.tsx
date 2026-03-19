@@ -29,8 +29,8 @@ export default function ChartGrid({ data, selectedMonth }: ChartGridProps) {
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <LeadSourceStackedBar data={data} />
         <TotalVsQualifiedBar data={data} />
+        <LeadSourceStackedBar data={data} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">

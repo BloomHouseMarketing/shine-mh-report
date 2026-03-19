@@ -14,48 +14,36 @@ export default function FilterableSection({
   data,
   summary,
 }: FilterableSectionProps) {
-  const [selectedMonth, setSelectedMonth] = useState<string>("All Time");
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    const filled = data.filter((r) => r.totalCalls !== null);
+    return filled[filled.length - 1]?.month ?? "All Time";
+  });
 
   const monthsWithData = data
     .filter((r) => r.totalCalls !== null)
     .map((r) => r.month);
 
-  const filteredSummary: ShineKPISummary =
-    selectedMonth === "All Time"
-      ? summary
-      : (() => {
-          const row = data.find((r) => r.month === selectedMonth);
-          if (!row || row.totalCalls === null) return summary;
-          const totalCalls = row.totalCalls;
-          const qualifiedCalls = row.qualifiedCalls ?? 0;
-          const qualificationRate =
-            totalCalls > 0
-              ? Math.round((qualifiedCalls / totalCalls) * 1000) / 10
-              : 0;
-          return {
-            ...summary,
-            totalCallsSum: totalCalls,
-            qualifiedCallsSum: qualifiedCalls,
-            qualificationRate,
-            avgOrganicPercent: row.adsLeadsPercent ?? 0,
-          };
-        })();
-
-  const isMonthSelected = selectedMonth !== "All Time";
+  const selectedRow = data.find((r) => r.month === selectedMonth);
+  const filteredSummary: ShineKPISummary = (() => {
+    if (!selectedRow || selectedRow.totalCalls === null) return summary;
+    const totalCalls = selectedRow.totalCalls;
+    const qualifiedCalls = selectedRow.qualifiedCalls ?? 0;
+    const qualificationRate =
+      totalCalls > 0
+        ? Math.round((qualifiedCalls / totalCalls) * 1000) / 10
+        : 0;
+    return {
+      ...summary,
+      totalCallsSum: totalCalls,
+      qualifiedCallsSum: qualifiedCalls,
+      qualificationRate,
+      avgOrganicPercent: selectedRow.organicLeadsPercent ?? 0,
+    };
+  })();
 
   return (
     <>
       <div className="flex flex-wrap gap-2 mb-6">
-        <button
-          onClick={() => setSelectedMonth("All Time")}
-          className={`rounded-full px-4 py-1.5 text-sm cursor-pointer ${
-            selectedMonth === "All Time"
-              ? "bg-brand-yellow text-brand-black font-semibold"
-              : "bg-white border border-brand-border text-brand-muted hover:border-brand-yellow transition"
-          }`}
-        >
-          All Time
-        </button>
         {monthsWithData.map((month) => (
           <button
             key={month}
@@ -72,10 +60,7 @@ export default function FilterableSection({
       </div>
 
       <div className="mb-6">
-        <KPICards
-          summary={filteredSummary}
-          monthSelected={isMonthSelected}
-        />
+        <KPICards summary={filteredSummary} />
       </div>
 
       <ChartGrid data={data} selectedMonth={selectedMonth} />
