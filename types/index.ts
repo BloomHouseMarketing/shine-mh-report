@@ -7,6 +7,7 @@ export interface ShineDataRow {
   qualifiedCalls: number | null;
   adsLeadsPercent: number | null;
   organicLeadsPercent: number | null;
+  admission: number | null;
 }
 
 // ─── KPI Summary ─────────────────────────────────────────────────────────────
@@ -17,6 +18,8 @@ export interface ShineKPISummary {
   avgAdsPercent: number;
   avgOrganicPercent: number;
   qualificationRate: number;
+  admissionSum: number;
+  admissionRate: number;
   latestMonth: string;
   latestAds: number;
   latestOrganic: number;

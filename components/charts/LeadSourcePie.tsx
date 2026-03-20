@@ -14,6 +14,29 @@ interface LeadSourcePieProps {
   selectedMonth?: string
 }
 
+const renderLabel = ({
+  cx, cy, midAngle, innerRadius, outerRadius, value
+}: any) => {
+  if (!value) return null
+  const RADIAN = Math.PI / 180
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5
+  const x = cx + radius * Math.cos(-midAngle * RADIAN)
+  const y = cy + radius * Math.sin(-midAngle * RADIAN)
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      dominantBaseline="central"
+      fontSize={13}
+      fontWeight={700}
+      fill="#FFFFFF"
+    >
+      {`${value}%`}
+    </text>
+  )
+}
+
 export default function LeadSourcePie({ data, selectedMonth = "All Time" }: LeadSourcePieProps) {
   const displayRow =
     selectedMonth !== "All Time"
@@ -75,6 +98,8 @@ export default function LeadSourcePie({ data, selectedMonth = "All Time" }: Lead
               startAngle={90}
               endAngle={-270}
               isAnimationActive={true}
+              label={renderLabel}
+              labelLine={false}
             >
               {pieData.map((entry, i) => (
                 <Cell key={i} fill={entry.color} />
