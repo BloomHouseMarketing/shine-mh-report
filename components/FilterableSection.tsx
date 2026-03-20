@@ -32,14 +32,24 @@ export default function FilterableSection({
       totalCalls > 0
         ? Math.round((qualifiedCalls / totalCalls) * 1000) / 10
         : 0;
+    const admission = selectedRow.admission ?? 0;
+    const admissionRate =
+      totalCalls > 0
+        ? Math.round((admission / totalCalls) * 1000) / 10
+        : 0;
     return {
       ...summary,
       totalCallsSum: totalCalls,
       qualifiedCallsSum: qualifiedCalls,
       qualificationRate,
+      admissionSum: admission,
+      admissionRate,
       avgOrganicPercent: selectedRow.organicLeadsPercent ?? 0,
     };
   })();
+
+  const admission = selectedRow?.admission ?? 0;
+  const admissionDisplay = admission > 0 ? String(admission) : "—";
 
   const activePill =
     "bg-brand-yellow text-brand-black font-semibold";
@@ -74,6 +84,7 @@ export default function FilterableSection({
         <KPICards
           summary={filteredSummary}
           adsLeadsPercent={`${selectedRow?.adsLeadsPercent ?? 0}%`}
+          admission={admissionDisplay}
         />
       </div>
 

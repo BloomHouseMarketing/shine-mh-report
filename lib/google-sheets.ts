@@ -6,10 +6,14 @@ import { ShineDataRow, ShineKPISummary } from "../types";
 // Contains only months that currently have real data.
 function buildStaticFallback(): ShineDataRow[] {
   return [
-    { month: "Dec 2025", totalCalls: 238, qualifiedCalls: 18, adsLeadsPercent: 22, organicLeadsPercent: 78 },
-    { month: "Jan 2026", totalCalls: 245, qualifiedCalls: 10, adsLeadsPercent: 20, organicLeadsPercent: 80 },
-    { month: "Feb 2026", totalCalls: 251, qualifiedCalls: 6,  adsLeadsPercent: 34, organicLeadsPercent: 66 },
-    { month: "Mar 2026", totalCalls: 168, qualifiedCalls: 5,  adsLeadsPercent: 20, organicLeadsPercent: 80 },
+    { month: "Aug 2025", totalCalls: 192, qualifiedCalls: 31, adsLeadsPercent: null, organicLeadsPercent: null, admission: null },
+    { month: "Sep 2025", totalCalls: 191, qualifiedCalls: 14, adsLeadsPercent: null, organicLeadsPercent: null, admission: null },
+    { month: "Oct 2025", totalCalls: 183, qualifiedCalls:  9, adsLeadsPercent: null, organicLeadsPercent: null, admission: null },
+    { month: "Nov 2025", totalCalls: 163, qualifiedCalls:  8, adsLeadsPercent: 50,   organicLeadsPercent: 50,   admission: null },
+    { month: "Dec 2025", totalCalls: 157, qualifiedCalls:  4, adsLeadsPercent: 22,   organicLeadsPercent: 78,   admission: null },
+    { month: "Jan 2026", totalCalls: 162, qualifiedCalls:  7, adsLeadsPercent: 20,   organicLeadsPercent: 80,   admission: null },
+    { month: "Feb 2026", totalCalls: 170, qualifiedCalls:  4, adsLeadsPercent: 34,   organicLeadsPercent: 66,   admission: null },
+    { month: "Mar 2026", totalCalls: 147, qualifiedCalls:  6, adsLeadsPercent: 20,   organicLeadsPercent: 80,   admission: null },
   ];
 }
 
@@ -28,6 +32,7 @@ function parseSheetRows(rows: string[][]): ShineDataRow[] {
       const rawQualified = row[2]?.trim() ?? "";
       const rawAds       = row[3]?.trim().replace("%", "") ?? "";
       const rawOrganic   = row[4]?.trim().replace("%", "") ?? "";
+      const rawAdmission = row[5]?.trim() ?? "";
 
       return {
         month,
@@ -35,6 +40,7 @@ function parseSheetRows(rows: string[][]): ShineDataRow[] {
         qualifiedCalls:      rawQualified ? parseInt(rawQualified, 10) : null,
         adsLeadsPercent:     rawAds       ? parseFloat(rawAds)         : null,
         organicLeadsPercent: rawOrganic   ? parseFloat(rawOrganic)     : null,
+        admission:           rawAdmission ? parseInt(rawAdmission, 10) : null,
       };
     })
     .filter((row): row is ShineDataRow => row !== null);
@@ -86,7 +92,7 @@ export async function fetchShineData(): Promise<ShineDataRow[]> {
     }
 
     const token = await getAccessToken();
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Sheet1!A:E`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/Sheet1!A:F`;
 
     const res = await fetch(url, {
       headers: {
@@ -136,6 +142,11 @@ export function getShineKPISummary(data: ShineDataRow[]): ShineKPISummary {
     ? Math.round((qualifiedCallsSum / totalCallsSum) * 1000) / 10
     : 0;
 
+  const admissionSum = filled.reduce((s, r) => s + (r.admission ?? 0), 0);
+  const admissionRate = totalCallsSum > 0
+    ? Math.round((admissionSum / totalCallsSum) * 1000) / 10
+    : 0;
+
   const latestRow = filled[filled.length - 1];
 
   return {
@@ -144,6 +155,8 @@ export function getShineKPISummary(data: ShineDataRow[]): ShineKPISummary {
     avgAdsPercent:      avg(adsValues),
     avgOrganicPercent:  avg(organicValues),
     qualificationRate,
+    admissionSum,
+    admissionRate,
     latestMonth:        latestRow?.month               ?? "—",
     latestAds:          latestRow?.adsLeadsPercent     ?? 0,
     latestOrganic:      latestRow?.organicLeadsPercent ?? 0,
