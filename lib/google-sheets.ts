@@ -6,14 +6,14 @@ import { ShineDataRow, ShineKPISummary } from "../types";
 // Contains only months that currently have real data.
 function buildStaticFallback(): ShineDataRow[] {
   return [
-    { month: "Aug 2025", totalCalls: 192, qualifiedCalls: 31, adsLeadsPercent: null, organicLeadsPercent: null, admission: null },
-    { month: "Sep 2025", totalCalls: 191, qualifiedCalls: 14, adsLeadsPercent: null, organicLeadsPercent: null, admission: null },
-    { month: "Oct 2025", totalCalls: 183, qualifiedCalls:  9, adsLeadsPercent: null, organicLeadsPercent: null, admission: null },
-    { month: "Nov 2025", totalCalls: 163, qualifiedCalls:  8, adsLeadsPercent: 50,   organicLeadsPercent: 50,   admission: null },
-    { month: "Dec 2025", totalCalls: 157, qualifiedCalls:  4, adsLeadsPercent: 22,   organicLeadsPercent: 78,   admission: null },
-    { month: "Jan 2026", totalCalls: 162, qualifiedCalls:  7, adsLeadsPercent: 20,   organicLeadsPercent: 80,   admission: null },
-    { month: "Feb 2026", totalCalls: 170, qualifiedCalls:  4, adsLeadsPercent: 34,   organicLeadsPercent: 66,   admission: null },
-    { month: "Mar 2026", totalCalls: 147, qualifiedCalls:  6, adsLeadsPercent: 20,   organicLeadsPercent: 80,   admission: null },
+    { month: "August 2025",    totalCalls: 192, qualifiedCalls: 31, adsLeadsPercent: 10, organicLeadsPercent: 90, admission: null },
+    { month: "September 2025", totalCalls: 191, qualifiedCalls: 14, adsLeadsPercent: 11, organicLeadsPercent: 89, admission: null },
+    { month: "October 2025",   totalCalls: 183, qualifiedCalls:  9, adsLeadsPercent: 30, organicLeadsPercent: 70, admission: null },
+    { month: "November 2025",  totalCalls: 163, qualifiedCalls:  8, adsLeadsPercent: 50, organicLeadsPercent: 50, admission: null },
+    { month: "December 2025",  totalCalls: 157, qualifiedCalls:  4, adsLeadsPercent: 22, organicLeadsPercent: 78, admission: null },
+    { month: "January 2026",   totalCalls: 162, qualifiedCalls:  7, adsLeadsPercent: 20, organicLeadsPercent: 80, admission: null },
+    { month: "Februray 2026",  totalCalls: 170, qualifiedCalls:  4, adsLeadsPercent: 34, organicLeadsPercent: 66, admission: null },
+    { month: "March 2026",     totalCalls: 252, qualifiedCalls: 11, adsLeadsPercent: 10, organicLeadsPercent: 90, admission: null },
   ];
 }
 
